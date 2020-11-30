@@ -9,7 +9,7 @@ This repository is a support package that is pre-configured already on ready dev
 - Multiple user support (max 16, amount of max midi channels), preferably in the same network.
 - Works through internal network (LAN / WLAN) and Bluetooth LE connections.
 - Attaches as normal USB device on host machine. (OS X / Windows / Linux / RPI), so no extra hacks needed.
-- Supports playing back the audio from remote host. (Headphones or speaker) 
+- Supports playing back the audio from remote host. (Headphones, external speaker, bluetooth, chromecast, or borderline stable airplay ) 
 - Record / manage your performances. Fetch your recordings easily through shared network drive.
 - Includes 1 USB port license for free, for 2 or more simultaneous controllers per Remidi-device, third party license is needed.
 	
