@@ -1,6 +1,7 @@
 
-Remidi is a raspberry pi overlay consisting of tools and system configurations to enable battery powered wireless midi / audio capabilities on any usb powered midi controller.
-This is support package that is pre-configured.
+Remidi is a Raspberry Pi overlay consisting of tools and system configurations to enable battery powered wireless midi, audio playback and audio recording capabilities on almost any usb powered midi controller.
+
+This is a support package that is pre-configured.
 
  - Multiple user support, though preferably in the same room.
  - Works through internal network (LAN / WLAN) and Bluetooth LE connections.
