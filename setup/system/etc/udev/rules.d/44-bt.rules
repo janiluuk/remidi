@@ -1,0 +1,2 @@
+ACTION=="add|remove", SUBSYSTEM=="bluetooth", RUN+="/usr/local/bin/remidi_connect.rb"    
+
