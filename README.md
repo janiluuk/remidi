@@ -4,6 +4,8 @@ Purpose for Remidi is to enable battery powered wireless midi, audio playback/re
 
 This repository is a support package that is pre-configured already on ready devices.
 
+## Features
+
 - Multiple user support (max 16, amount of max midi channels), preferably in the same network.
 - Works through internal network (LAN / WLAN) and Bluetooth LE connections.
 - Attaches as normal USB device on host machine. (OS X / Windows / Linux / RPI), so no extra hacks needed.
