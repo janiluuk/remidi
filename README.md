@@ -21,6 +21,7 @@ Feel free to use on your own device, or you can purchase ready configured one op
 Requirements for using on your own device;
 - Raspberry Pi 3 Model A / B or Zero W
 - Battery HAT + battery
+- FAST SD card, preferably 170Mb/sec. Has been tested on Sandisk cards which seem to work well.
 - Case that is light weight and attachable on the controller. (Unless you prefer wireless solution with wires)
 - LCD display for the case with 4 buttons (up,down,back,select) 
 - Raspbian (Autumn 2020+) 
