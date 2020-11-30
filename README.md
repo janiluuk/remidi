@@ -4,7 +4,7 @@ Remidi is a Raspberry Pi overlay consisting of tools and system configurations t
 
 This is a support package that is pre-configured.
 
-- Multiple user support, though preferably in the same room.
+- Multiple user support (max 16, amount of max midi channels), preferably in the same network.
 - Works through internal network (LAN / WLAN) and Bluetooth LE connections.
 - Attaches as normal USB device on host machine. (OS X / Windows / Linux / RPI), so no extra hacks needed.
 - Supports playing back the audio from remote host. (Headphones or speaker) 
