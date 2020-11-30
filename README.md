@@ -14,4 +14,6 @@ This is a support package that is pre-configured.
 Ready disk-images for Raspberry Pi Zero W & Pi 3 Model A devices.
 Can be easily ported to other environments as well.
 
+Feel free to use on your own device, or you can purchase ready configured one optimized for the purpose.
+
 See https://www.remidi.net
