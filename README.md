@@ -1,4 +1,4 @@
-#Remidi
+
 Remidi is a raspberry pi overlay consisting of tools and system configurations to enable battery powered wireless midi / audio capabilities on any usb powered midi controller.
 This is support package that is pre-configured.
 
