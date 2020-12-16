@@ -1,7 +1,7 @@
 #!/bin/bash -v
 # CREATE AN ISO IMAGE FOR REMIDI
 #
-# USAGE: chmod 777 remidi_iso_maker.sh ; nohup sudo ./remidi_iso_maker.sh &
+# USAGE: chmod 777 generate_image.sh ; nohup sudo ./generate_image.sh &
 
 set -e
 
@@ -120,7 +120,7 @@ chroot sdcard pip install rtmidi-python pyaudio cffi sounddevice
 sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' sdcard/etc/ssh/sshd_config
 
 # remidi
-chroot sdcard sh -c "cd /root ; git clone https://github.com/josephernest/remidi.git ; cd remidi ; python setup.py build_ext --inplace"
+chroot sdcard sh -c "cd /root ; git clone https://github.com/janiluuk/remidi.git ; cd remidi ; python setup.py build_ext --inplace"
 
 cat <<EOF > sdcard/root/remidi/remidi.sh
 #!/bin/sh
