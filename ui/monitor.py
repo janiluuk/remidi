@@ -6,7 +6,6 @@ from luma.core import lib
 
 from luma.lcd.device import st7789
 import RPi.GPIO as GPIO
-import ST7789 as ST7789
 
 import sys
 import time
@@ -18,13 +17,14 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-SPI_SPEED_MHZ = 80
+SPI_SPEED_MHZ = 100
+
 
 
 #GPIO define
-RST_PIN  = 25 #Reset
+RST_PIN  = 27 #Reset
 CS_PIN   = 8
-DC_PIN   = 24
+DC_PIN   = 25
 JS_U_PIN = 6  #Joystick Up
 JS_D_PIN = 19 #Joystick Down
 JS_L_PIN = 5  #Joystick Left
@@ -34,22 +34,25 @@ BTN1_PIN = 21
 BTN2_PIN = 20
 BTN3_PIN = 16
 
-# Some constants
-SCREEN_LINES = 10
+# Some constants Some constants
+SCREEN_LINES = 6
 SCREEN_SAVER = 20.0
-CHAR_WIDTH = 19
-font = ImageFont.load_default()
+CHAR_WIDTH = 22
+#font = ImageFont.load_default()
+font = ImageFont.truetype("/home/pi/remidi/ui/font.ttf", 14)
+
 width = 240
 height = 240
 x0 = 0
-x1 = 84
-y0 = 0
-y1 = 12
+x1 = 120
+y0 = -2
+y1 = 32
 x2 = x1+7
 x3 = x1+14
 x4 = x1+9
 x5 = x2+9
 x6 = x3+9
+y2= y1+32
 
 choices = [
 	["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"],
@@ -66,24 +69,24 @@ GPIO.setup(JS_R_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Input with pull-up
 GPIO.setup(JS_P_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Input with pull-up
 GPIO.setup(BTN1_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Input with pull-up
 GPIO.setup(BTN2_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Input with pull-up
-GPIO.setup(BTN3_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Input with pull-up
+GPIO.setup(BTN3_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Input with pull-up#
 
 # Initialize the display...
-#serial = spi(device=0, port=0, bus_speed_hz = 8000000, transfer_size = 4096, gpio_DC = DC_PIN, gpio_RST = RST_PIN)
-#device = st7789(serial, rotate=0) #sh1106
+serial = spi(device=0, port=0, bus_speed_hz = 4000000, transfer_size = 4096, gpio_DC = DC_PIN, gpio_RST = RST_PIN)
+device = st7789(serial, rotate=2) #sh1106
 
 # Create ST7789 LCD display class.
-device = ST7789.ST7789(
-    port=0,
-    cs=ST7789.BG_SPI_CS_FRONT,  # BG_SPI_CS_BACK or BG_SPI_CS_FRONT
-    dc=9,
-    backlight=19,               # 18 for back BG slot, 19 for front BG slot.
-    rotation=90,
-    spi_speed_hz=SPI_SPEED_MHZ * 1000000
-)
+#device = ST7789.ST7789(
+#    port=0,
+#    cs=ST7789.BG_SPI_CS_FRONT,  # BG_SPI_CS_BACK or BG_SPI_CS_FRONT
+#    dc=9,
+#    backlight=19,               # 18 for back BG slot, 19 for front BG slot.
+#    rotation=90,
+#    spi_speed_hz=SPI_SPEED_MHZ * 1000000
+#)
 
 #image = Image.new("RGB", (width, height), (0, 0, 128))
-image = Image.new("RGB", (width, height), "BLACK")
+image = Image.new("RGB", (width, height), (255,255,0))
 
 draw = ImageDraw.Draw(image)
 
@@ -92,7 +95,7 @@ draw.rectangle((0,0,width,height), outline=0, fill=0)
 state = 1 #System state: 0 - scrren is off; equal to channel number (e.g. BTN2_PIN, JS_P_PIN) otherwise
 horz = 1 #Selection choice: 0 - Right; 1 - Left
 vert = 1 #Selection choice: 1 - Top; 2 - Middle; 3 - Bottom
-stamp = time.time() #Current timestamp
+stamp = time.time() #Current timestampw
 start = time.time() #Start screen saver count down
 iface = ""
 idxWin = 0
@@ -107,6 +110,9 @@ test = 0 # For testing!@1!!!!!!!!!!!!!!!!!!!!
 
 def click_b1(channel):
 	global chaSel
+
+	print(state)
+
 	if state == BTN1_PIN:
 		main_fun(channel)
 	else:
@@ -163,8 +169,9 @@ def click_b2(channel):
 		print (''.join(pwdLst)) #TODO change password for real...
 		start = stamp - SCREEN_SAVER + 5
 	else:
-		result = os.popen("iwlist {0} scan 2>/dev/null | grep '^..*ESSID:\"..*\"$' | sed 's/^.*ESSID:\"\\(..*\\)\".*$/\\1/'".format(iface)).read()
-		aplist = result.splitlines()
+		result = os.popen("iwlist wlan0 scan 2>/dev/null | grep '^..*ESSID:\"..*\"$' | sed 's/^.*ESSID:\"\\(..*\\)\".*$/\\1/'".format(iface)).read()
+
+		aplist = result.split()
 
 		idxLen = len(aplist)
 		if (idxWin + SCREEN_LINES) > idxLen:
@@ -271,26 +278,27 @@ def draw_scn(channel):
 	global pwdLen
 	global apIndx
 	with canvas(device) as draw:
-		LINE0 = subprocess.check_output("date +\"%Y-%m-%d %H:%M:%S\"", shell = True)
+		LINE0 = subprocess.check_output("date +\"%Y-%m-%d %H:%M:%S\"", shell = True).decode("utf-8")
+	
 		LINE1 = ""
 		LINE2 = ""
 		LINE3 = ""
 		LINE4 = ""
 		if channel == BTN1_PIN:
 			if horz == 1:
-				ssid = subprocess.check_output("iwgetid --raw | awk '{printf \"WiFi:%s\", $0}'", shell = True)
-				freq = subprocess.check_output("iwgetid --freq | awk '{gsub(/Frequency:/,\"\"); printf \" %.1f %s\", $2,$3}'", shell = True)
-				LINE1 = subprocess.check_output("hostname -I | awk '{printf \"IP: %s\", $1}'", shell = True )
-				LINE2 = subprocess.check_output("df -h /mnt/usb | awk '$NF==\"/mnt/usb\"{printf \"Disk:%s/%s %s\", $3,$2,$5}'", shell = True )
+				ssid = subprocess.check_output("iwgetid --raw | awk '{printf \"WiFi:%s\", $0}'", shell = True).decode("utf-8")
+				freq = subprocess.check_output("iwgetid --freq | awk '{gsub(/Frequency:/,\"\"); printf \" %.1f %s\", $2,$3}'", shell = True).decode("utf-8")
+				LINE1 = subprocess.check_output("hostname -I | awk '{printf \"IP: %s\", $1}'", shell = True ).decode("utf-8")
+				LINE2 = subprocess.check_output("df -h /mnt/usb | awk '$NF==\"/mnt/usb\"{printf \"Disk:%s/%s %s\", $3,$2,$5}'", shell = True ).decode("utf-8")
 				LINE3 = ssid + freq
-				LINE4 = subprocess.check_output("cat /sys/class/thermal/thermal_zone0/temp | awk '{printf \"Temp:%.1fC\", $1/1000}'", shell = True )
+				LINE4 = subprocess.check_output("cat /sys/class/thermal/thermal_zone0/temp | awk '{printf \"Temp:%.1fC\", $1/1000}'", shell = True ).decode("utf-8")
 				draw.rectangle((0,61,84,63), outline=255, fill=1)
 				draw.rectangle((85,61,127,63), outline=255, fill=0)
 			else:
-				LINE1 = subprocess.check_output("top -bn1 | awk 'NR==3{printf \"CPU:%.1f%% idle\", $8}'", shell = True )
-				LINE2 = subprocess.check_output("free -mh | awk 'NR==2{printf \"Mem:%s/%s %.1f%%\", $3,$2,$3*100/$2 }'", shell = True )
+				LINE1 = subprocess.check_output("top -bn1 | awk 'NR==3{printf \"CPU:%.1f%% idle\", $8}'", shell = True ).decode("utf-8")
+				LINE2 = subprocess.check_output("free -mh | awk 'NR==2{printf \"Mem:%s/%s %.1f%%\", $3,$2,$3*100/$2 }'", shell = True ).decode("UTF-8")
 				LINE3 = "  in Kbps  out Kbps"
-				LINE4 = subprocess.check_output("ifstat -bT 0.1 1 | awk 'NR==3{printf \"%9.2f %9.2f\",$3,$4}'", shell = True)
+				LINE4 = subprocess.check_output("ifstat -bT 0.1 1 | awk 'NR==3{printf \"%9.2f %9.2f\",$3,$4}'", shell = True).decode("utf-8")
 				draw.rectangle((0,61,42,63), outline=255, fill=0)
 				draw.rectangle((43,61,127,63), outline=255, fill=1)
 		elif channel == BTN3_PIN:
@@ -333,8 +341,10 @@ def draw_scn(channel):
 
 				draw.polygon([(x1,y2+6),(x2,y2-1),(x2,y2+4),(x3,y2+4),(x3,y2+8),(x2,y2+8),(x2,y2+13)], outline=255, fill=1)
 				draw.rectangle((125,12,127,60), outline=255, fill=0)
+				thumb_s = 48.0
+				if (idxLen > 0):
+					thumb_s = 48.0 / idxLen #Step
 
-				thumb_s = 48.0 / idxLen #Step
 				thumb_h = thumb_s * 4 #Because the screen can display 4 rows at a time
 				thumb_0 = idxWin * thumb_s + 12
 				thumb_1 = thumb_0 + thumb_h
@@ -400,18 +410,18 @@ def main_fun(channel):
 	if state <= 0: # Display is off
 		if channel > 0: # A button is pressed, turn on display
 			# Initialize the display...
-			serial = spi(device=0, port=0, bus_speed_hz = 8000000, transfer_size = 4096, gpio_DC = DC_PIN, gpio_RST = RST_PIN)
-		#	device = st7789(serial, rotate=2) #sh1106
-			device = ST7789.ST7789(
-			    port=0,
-			    cs=ST7789.BG_SPI_CS_FRONT,  # BG_SPI_CS_BACK or BG_SPI_CS_FRONT
-			    dc=9,
-			    backlight=19,               # 18 for back BG slot, 19 for front BG slot.
-			    rotation=90,
-			    spi_speed_hz=SPI_SPEED_MHZ * 1000000
-			)
+			serial = spi(device=0, port=0, bus_speed_hz = 4000000, transfer_size = 4096, gpio_DC = DC_PIN, gpio_RST = RST_PIN)
+			device = st7789(serial, rotate=2) #sh1106
+			#device = ST7789.ST7789(
+			#    port=0,
+			#    cs=ST7789.BG_SPI_CS_FRONT,  # BG_SPI_CS_BACK or BG_SPI_CS_FRONT
+			#    dc=9,
+			#    backlight=19,               # 18 for back BG slot, 19 for front BG slot.
+			#    rotation=90,
+			#    spi_speed_hz=SPI_SPEED_MHZ * 1000000
+			#)
 
-			image = Image.new("RGB", (width, height), "BLACK")
+			image = Image.new("RGB", (width, height), "WHITE")
 			#image = Image.new('1', (width, height))
 			draw = ImageDraw.Draw(image)
 			draw.rectangle((0,0,width,height), outline=0, fill=0)
@@ -441,7 +451,7 @@ GPIO.add_event_detect(JS_R_PIN, GPIO.RISING, callback=select_h, bouncetime=200)
 GPIO.add_event_detect(JS_U_PIN, GPIO.RISING, callback=select_v, bouncetime=200)
 GPIO.add_event_detect(JS_D_PIN, GPIO.RISING, callback=select_v, bouncetime=200)
 
-iface = subprocess.check_output("iwgetid | awk '{print $1}'", shell = True)
+iface = subprocess.check_output("iwgetid | awk '{print $1}'", shell = True).decode("utf-8")
 #.rstrip("\r\n")
 
 # Main Loop

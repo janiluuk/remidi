@@ -40,3 +40,6 @@ sudo python -m pip install --upgrade pip setuptools wheel
 git clone https://github.com/adafruit/Adafruit_Python_SSD1306.git
 cd Adafruit_Python_SSD1306
 sudo python setup.py install
+
+cd
+pip3 install ST7789
