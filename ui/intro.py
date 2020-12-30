@@ -46,5 +46,5 @@ disp.clear()
 image1 = Image.new("RGB", (disp.width, disp.height), "BLACK")
 jpg = Image.open('/home/pi/remidi/ui/remidi_240.jpg')
 disp.ShowImage(jpg,0,0)
-time.sleep(3600)
+time.sleep(30)
 
