@@ -1,1 +1,0 @@
-/home/pi/remidi/lcd/vendor/ST7735/python/main.py

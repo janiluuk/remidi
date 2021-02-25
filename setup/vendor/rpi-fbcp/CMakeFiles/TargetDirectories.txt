@@ -1,0 +1,3 @@
+/home/pi/remidi/lcd/rpi-fbcp/CMakeFiles/rebuild_cache.dir
+/home/pi/remidi/lcd/rpi-fbcp/CMakeFiles/fbcp.dir
+/home/pi/remidi/lcd/rpi-fbcp/CMakeFiles/edit_cache.dir
