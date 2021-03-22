@@ -1,0 +1,17 @@
+[Unit]
+Description=UI provider
+#After=mopidy.service
+#Wants=mopidy.service
+
+[Service]
+User=pi
+Group=pi
+Type=forking
+WorkingDirectory=/home/pi/ui
+ExecStart=/home/pi/remidi/ui/start-ui.sh start
+ExecStop=/home/pi/remidi/ui/start-ui.sh stop
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
