@@ -14,6 +14,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 import socket, sys
 import os
+import opts
 import base64
 import struct
 import smbus
@@ -39,19 +40,19 @@ def readCapacity(bus):
         return capacity
 
 
-bus = smbus.SMBus(1)  # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
+#bus = smbus.SMBus(1)  # 0 = /dev/i2c-0 (port I2C0), 1 = /dev/i2c-1 (port I2C1)
 
 GPIO.setwarnings(False)
 #remidi essential const
-hidpath = "/home/pi/remidi/scripts/HIDScripts/"
-sshpath = "/home/pi/remidi/scripts/"
+hidpath = "/home/pi/remidi/ui/scripts/HIDScripts/"
+sshpath = "/home/pi/remidi/ui/scripts/"
 
 # Load default font.
 font = ImageFont.load_default()
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
-width = 128
-height = 64
+width = 240
+height = 240
 image = Image.new('1', (width, height))
 # First define some constants to allow easy resizing of shapes.
 padding = -2
@@ -68,14 +69,14 @@ brightness = 255 #Max
 fichier=""
 # Move left to right keeping track of the current x position for drawing shapes.
 x = 0
-RST = 25
+RST = 27
 CS = 8
-DC = 24
+DC = 25
 
 #GPIO define and OLED configuration
-RST_PIN        = 25 #waveshare settings
+RST_PIN        = 27 #waveshare settings
 CS_PIN         = 8  #waveshare settings
-DC_PIN         = 24 #waveshare settings
+DC_PIN         = 25 #waveshare settings
 KEY_UP_PIN     = 6  #stick up
 KEY_DOWN_PIN   = 19 #stick down
 KEY_LEFT_PIN   = 5 #5  #sitck left // go back
@@ -97,7 +98,7 @@ GPIO.setup(KEY2_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-u
 GPIO.setup(KEY3_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)      # Input with pull-up
 screensaver = 0
 #SPI
-#serial = spi(device=0, port=0, bus_speed_hz = 8000000, transfer_size = 4096, gpio_DC = 24, gpio_RST = 25)
+serial = spi(device=0, port=0, bus_speed_hz = 16000000, transfer_size = 4096, gpio_DC = 25, gpio_RST = 27)
 if SCNTYPE == 1:
     if  USER_I2C == 1:
         GPIO.setmode(GPIO.BCM)
@@ -107,7 +108,7 @@ if SCNTYPE == 1:
     else:
         serial = spi(device=0, port=0, bus_speed_hz = 8000000, transfer_size = 4096, gpio_DC = 24, gpio_RST = 25)
 if SCNTYPE == 1:
-    device = sh1106(serial, rotate=2) #sh1106
+    device = opts.get_device()
 def DisplayText(l1,l2,l3,l4,l5,l6,l7):
     # simple routine to display 7 lines of text
     if SCNTYPE == 1:
@@ -264,7 +265,8 @@ def OLEDContrast(contrast):
                 draw.text((54, line4), "Value : " + str(contrast),  font=font, fill=255)
     return(contrast)
 def splash():
-    img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'images', 'bootwhat.bmp'))
+    width = str(device.width)
+    img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'images', 'remidi_' +  width + '.bmp'))
     splash = Image.open(img_path) \
         .transform((device.width, device.height), Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
         .convert(device.mode)

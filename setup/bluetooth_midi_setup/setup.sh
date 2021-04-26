@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "Installing bluetooth midi system"
+
 git clone https://github.com/oxesoft/bluez
 sudo apt-get install -y autotools-dev libtool autoconf
 sudo apt-get install -y libasound2-dev

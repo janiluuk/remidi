@@ -68,13 +68,26 @@ z3draw.text((10,10),"Zone3", fill="white")
 UpdateDisplay(z1,z2,z3)
 
 
+def intro(duration_sec=3):
+    device = get_device()
+    img_path = str(Path(opts.ROOT_PATH).resolve().joinpath('ui/res/images', 'remidi_128.bmp'))
+    splash = Image.open(img_path) \
+        .transform((device.width, device.height), Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
+        .convert(device.mode)
+
+    device.display(splash)
+    time.sleep(duration_sec) 
+    device.clear()
 
 def main(num_iterations=sys.maxsize):
     device = get_device()
-    regulator = framerate_regulator(fps=4)
+    regulator = framerate_regulator(fps=6)
+    intro(3)
+
     font = make_font("fontawesome-webfont.ttf", device.height - 10)
     i = 0
     menu_length = len(opts.fonts)
+
 
     # try:
     while 1:

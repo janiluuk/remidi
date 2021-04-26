@@ -1,0 +1,10 @@
+#!/bin/sh
+
+        if [ ! -f /home/pi/remidi/config/services/$1.disabled ]; then
+                echo "$1 is already enabled, exiting"
+                exit 3
+        fi
+echo "$1 enabled"
+
+sudo mv /home/pi/remidi/config/services/$1.disabled /home/pi/remidi/config/services/$1
+

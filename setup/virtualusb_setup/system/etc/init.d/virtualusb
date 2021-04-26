@@ -48,6 +48,13 @@ do_start()
 
 	fi
 
+	if [ ! -f /home/pi/remidi/config/services/virtualusb ]; then
+		echo "VirtualUSB is not enabled, exiting"
+		exit 3
+	fi
+
+
+
 	# Return
 	#   0 if daemon has been started
 	#   1 if daemon was already running
@@ -70,7 +77,7 @@ do_stop()
 	#   1 if daemon was already stopped
 	#   2 if daemon could not be stopped
 	#   other if a failure occurred
-	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+	start-stop-daemon --stop --quiet --retry=TERM/3/KILL/5 --pidfile $PIDFILE --name $NAME
 	RETVAL="$?"
 	[ "$RETVAL" = 2 ] && return 2
 	# Wait for children to finish too if this is a daemon that forks
@@ -102,6 +109,11 @@ do_reload() {
 case "$1" in
   start)
 	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	        if [ ! -f /home/pi/remidi/config/services/virtualusb ]; then
+                echo "VirtualUSB is not enabled, exiting"
+                exit 3
+        fi
+
 	do_start
 	case "$?" in
 		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
@@ -137,6 +149,11 @@ case "$1" in
 	do_stop
 	case "$?" in
 	  0|1)
+        if [ ! -f /home/pi/remidi/config/services/virtualusb ]; then
+                echo "VirtualUSB is not enabled, exiting"
+                exit 3
+        fi
+
 		do_start
 		case "$?" in
 			0) log_end_msg 0 ;;

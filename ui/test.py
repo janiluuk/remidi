@@ -67,7 +67,7 @@ device = sh1106(serial, rotate=2) #sh1106
 
 
 # Create blank image for drawing.
-image1 = Image.new("RGB", (disp.width, disp.height), "DARKBLUE")
+image1 = Image.new("RGB", width, height), "DARKBLUE")
 draw = ImageDraw.Draw(image1)
 font = ImageFont.truetype(uipath+'/res/fonts/introfont.ttf', 32)
 fontbig = ImageFont.truetype(uipath+'/res/fonts/fontbig.ttf', 48)

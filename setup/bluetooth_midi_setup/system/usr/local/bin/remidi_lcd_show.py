@@ -66,9 +66,9 @@ top = padding
 bottom = height-padding
 x = 0
 
-#font = ImageFont.load_default()
+font = ImageFont.load_default()
 height = 12
-font = ImageFont.truetype('/usr/share/fonts/truetype/lato/Lato-Semibold.ttf', height)
+#font = ImageFont.truetype('/usr/share/fonts/truetype/lato/Lato-Semibold.ttf', height)
 
 for y in range(0, len(sys.argv)-1):
     draw.text((x, top+y*height), sys.argv[y+1], font=font, fill=255)
@@ -76,6 +76,5 @@ for y in range(0, len(sys.argv)-1):
 disp.image(image)
 disp.display()
 
-releaseLock(lock_fd)    
-
+releaseLock(lock_fd)  
 

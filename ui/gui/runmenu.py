@@ -12,11 +12,11 @@ try:
     print(pidnumber + " => " + pidname)
     cmd="kill "+ pidnumber + " &"
     exe = subprocess.check_output(cmd, shell = True )
-    cmd="python /root/BeBoXGui/gui.py &"
+    cmd="python3 /home/pi/remidi/ui/gui/gui.py &"
     exe = subprocess.check_output(cmd, shell = True )
     exit()
 except:
     print("no pid")
-    cmd="python /root/BeBoXGui/gui.py &"
+    cmd="python3 /home/pi/remidi/ui/gui/gui.py &"
     exe = subprocess.check_output(cmd, shell = True )
     exit()

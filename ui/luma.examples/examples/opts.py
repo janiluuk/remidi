@@ -7,6 +7,8 @@ import logging
 
 from luma.core import cmdline, error
 import RPi.GPIO as GPIO
+
+ROOT_PATH="/home/pi/remidi"
 #GPIO define
 RST_PIN        = 25
 CS_PIN         = 8

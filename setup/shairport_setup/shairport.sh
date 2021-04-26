@@ -2,6 +2,7 @@
 
 sudo git clone https://github.com/abrasive/shairport.git
 cd shairport && sudo ./configure
+sudo apt-get install libssl-dev libao-dev libpulse-dev pulseaudio-module-zeroconf pulsemixer
 sudo make
 sudo make install
 sudo cp scripts/debian/init.d/shairport /etc/init.d/shairport

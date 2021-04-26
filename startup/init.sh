@@ -1,6 +1,2 @@
 #!/bin/sh
-
-/home/pi/remidi/ui/bin/luma_play.sh carousel &
-sleep 30 &&
-/home/pi/remidi/ui/bin/luma_play.sh font_awesome &
-
+python3 /home/pi/remidi/ui/gui/runmenu.py
